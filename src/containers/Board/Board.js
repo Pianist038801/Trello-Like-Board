@@ -8,6 +8,7 @@ import * as ListsActions from "../../actions/lists";
 
 import CardsContainer from "./Cards/CardsContainer";
 import CustomDragLayer from "./CustomDragLayer";
+import AddButton from "../Elements/AddButton";
 
 function mapStateToProps(state) {
   return {
@@ -18,7 +19,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(ListsActions, dispatch);
 }
-
 @connect(mapStateToProps, mapDispatchToProps)
 @DragDropContext(HTML5Backend)
 export default class Board extends Component {
@@ -26,6 +26,7 @@ export default class Board extends Component {
     getLists: PropTypes.func.isRequired,
     moveCard: PropTypes.func.isRequired,
     moveList: PropTypes.func.isRequired,
+    addList: PropTypes.func.isRequired,
     lists: PropTypes.array.isRequired,
   };
 
@@ -38,6 +39,7 @@ export default class Board extends Component {
     this.scrollLeft = this.scrollLeft.bind(this);
     this.stopScrolling = this.stopScrolling.bind(this);
     this.startScrolling = this.startScrolling.bind(this);
+    this.addList = this.addList.bind(this);
     this.state = { isScrolling: false };
   }
 
@@ -97,6 +99,10 @@ export default class Board extends Component {
     };
   }
 
+  addList(name) {
+    const { addList } = this.props;
+    addList(name);
+  }
   render() {
     const { lists } = this.props;
 
@@ -116,6 +122,9 @@ export default class Board extends Component {
             x={i}
           />
         ))}
+        <AddButton onClick={this.addList} className="add-list-button">
+          + Add a List
+        </AddButton>
       </div>
     );
   }

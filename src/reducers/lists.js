@@ -10,6 +10,8 @@ import {
   ADD_CARD,
   DELETE_EMAIL,
   DELETE_CARD,
+  DELETE_LIST,
+  ADD_LIST,
 } from "../actions/types";
 
 /* eslint-disable new-cap */
@@ -64,6 +66,26 @@ export default function lists(state = initialState, action) {
       const newLists = [...state.lists];
       const { x, y } = action;
       newLists[x].cards.splice(y, 1);
+      return state.withMutations((ctx) => {
+        ctx.set("lists", newLists);
+      });
+    }
+    case DELETE_LIST: {
+      const newLists = [...state.lists];
+      const { x } = action;
+      newLists.splice(x, 1);
+      return state.withMutations((ctx) => {
+        ctx.set("lists", newLists);
+      });
+    }
+    case ADD_LIST: {
+      const newLists = [...state.lists];
+      const { title } = action;
+      newLists.push({
+        id: newLists.length,
+        name: title,
+        cards: [],
+      });
       return state.withMutations((ctx) => {
         ctx.set("lists", newLists);
       });

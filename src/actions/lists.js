@@ -6,6 +6,8 @@ import {
   MOVE_LIST,
   TOGGLE_DRAGGING,
   ADD_CARD,
+  DELETE_LIST,
+  ADD_LIST,
 } from "./types";
 
 export function getLists(quantity) {
@@ -39,5 +41,17 @@ export function addCard(x, title) {
 export function toggleDragging(isDragging) {
   return (dispatch) => {
     dispatch({ type: TOGGLE_DRAGGING, isDragging });
+  };
+}
+
+export function deleteList(x) {
+  return (dispatch) => {
+    dispatch({ type: DELETE_LIST, x });
+  };
+}
+
+export function addList(title) {
+  return (dispatch) => {
+    dispatch({ type: ADD_LIST, title });
   };
 }

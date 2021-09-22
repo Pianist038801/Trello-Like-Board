@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from "react";
-
 export default class AddButton extends Component {
   static propTypes = {
     onClick: PropTypes.func.isRequired,
+    className: PropTypes.string,
+    children: PropTypes.string,
   };
 
   constructor(props) {
@@ -32,12 +33,13 @@ export default class AddButton extends Component {
     }
   }
   render() {
+    const { className, children } = this.props;
     const { isClicked, newStr } = this.state;
     if (isClicked) {
       return (
         <input
           type="text"
-          style={{ width: "100%" }}
+          style={{ width: "calc(100% - 10px)", margin: "0px 5px" }}
           value={newStr}
           onChange={this.handleChange}
           onBlur={this.onBlur}
@@ -47,13 +49,12 @@ export default class AddButton extends Component {
     }
     return (
       <button
-        className="item"
+        className={Boolean(className) ? className : "item"}
         onClick={(e) => {
           this.setState({ isClicked: true, newStr: "" });
         }}
       >
-        {" "}
-        + Add{" "}
+        {Boolean(children) ? children : "Add"}
       </button>
     );
   }

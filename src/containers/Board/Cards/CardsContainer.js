@@ -1,7 +1,12 @@
 import React, { Component, PropTypes } from "react";
 import { DropTarget, DragSource } from "react-dnd";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+
+import * as ListActions from "../../../actions/lists";
 
 import Cards from "./Cards";
+import DelButton from "../../Elements/DelButton";
 
 const listSource = {
   beginDrag(props) {
@@ -42,6 +47,17 @@ const listTarget = {
   },
 };
 
+function mapStateToProps(state) {
+  return {
+    lists: state.lists.lists,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(ListActions, dispatch);
+}
+
+@connect(mapStateToProps, mapDispatchToProps)
 @DropTarget("list", listTarget, (connectDragSource) => ({
   connectDropTarget: connectDragSource.dropTarget(),
 }))
@@ -63,6 +79,15 @@ export default class CardsContainer extends Component {
     isScrolling: PropTypes.bool,
   };
 
+  constructor(props) {
+    super(props);
+    this.onDelete = this.onDelete.bind(this);
+  }
+  onDelete() {
+    const { x, deleteList } = this.props;
+    deleteList(x);
+  }
+
   render() {
     const {
       connectDropTarget,
@@ -78,7 +103,10 @@ export default class CardsContainer extends Component {
       connectDropTarget(
         <div className="desk" style={{ opacity }}>
           <div className="desk-head">
-            <div className="desk-name">{item.name}</div>
+            <div className="desk-name">
+              {item.name}
+              <DelButton onClick={this.onDelete} />
+            </div>
           </div>
           <Cards
             moveCard={moveCard}
