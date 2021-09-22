@@ -20,27 +20,9 @@ export function getLists(quantity) {
   };
 }
 
-export function moveList(lastX, nextX) {
+export function addList(title) {
   return (dispatch) => {
-    dispatch({ type: MOVE_LIST, lastX, nextX });
-  };
-}
-
-export function moveCard(lastX, lastY, nextX, nextY) {
-  return (dispatch) => {
-    dispatch({ type: MOVE_CARD, lastX, lastY, nextX, nextY });
-  };
-}
-
-export function addCard(x, title) {
-  return (dispatch) => {
-    dispatch({ type: ADD_CARD, x, title });
-  };
-}
-
-export function toggleDragging(isDragging) {
-  return (dispatch) => {
-    dispatch({ type: TOGGLE_DRAGGING, isDragging });
+    dispatch({ type: ADD_LIST, title });
   };
 }
 
@@ -50,8 +32,26 @@ export function deleteList(x) {
   };
 }
 
-export function addList(title) {
+export function moveList(lastX, nextX) {
   return (dispatch) => {
-    dispatch({ type: ADD_LIST, title });
+    dispatch({ type: MOVE_LIST, lastX, nextX });
+  };
+}
+
+export function addCard(x, title) {
+  return (dispatch) => {
+    dispatch({ type: ADD_CARD, x, title });
+  };
+}
+
+export function moveCard(lastX, lastY, nextX, nextY) {
+  return (dispatch) => {
+    dispatch({ type: MOVE_CARD, lastX, lastY, nextX, nextY });
+  };
+}
+
+export function toggleDragging(isDragging) {
+  return (dispatch) => {
+    dispatch({ type: TOGGLE_DRAGGING, isDragging });
   };
 }

@@ -1,15 +1,13 @@
-import React, { Component, PropTypes } from "react";
+import React, { PropTypes } from "react";
 
-export default class DelButton extends Component {
-  static propTypes = {
-    onClick: PropTypes.func.isRequired,
-  };
-
-  render() {
-    return (
-      <button className="delete-button" onClick={this.props.onClick}>
-        Del
-      </button>
-    );
-  }
+export default function DelButton({ onClick }) {
+  return (
+    <button className="delete-button" onClick={onClick}>
+      Del
+    </button>
+  );
 }
+
+DelButton.propTypes = {
+  onClick: PropTypes.func.isRequired,
+};
