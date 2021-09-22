@@ -1,9 +1,13 @@
 import React, { Component, PropTypes } from "react";
 import { DropTarget } from "react-dnd";
 import { findDOMNode } from "react-dom";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
 import Card from "./DraggableCard";
 import { CARD_HEIGHT, CARD_MARGIN, OFFSET_HEIGHT } from "../../../constants.js";
+import AddButton from "../../Elements/AddButton";
+import * as ListsActions from "../../../actions/lists";
 
 function getPlaceholderIndex(y, scrollY) {
   // shift placeholder if y position more than card height / 2
@@ -79,6 +83,14 @@ const specs = {
     document.getElementById(item.id).style.display = "none";
   },
 };
+function mapStateToProps(state) {
+  return {
+    lists: state.lists.lists,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(ListsActions, dispatch);
+}
 
 @DropTarget("card", specs, (connectDragSource, monitor) => ({
   connectDropTarget: connectDragSource.dropTarget(),
@@ -86,6 +98,7 @@ const specs = {
   canDrop: monitor.canDrop(),
   item: monitor.getItem(),
 }))
+@connect(mapStateToProps, mapDispatchToProps)
 export default class Cards extends Component {
   static propTypes = {
     connectDropTarget: PropTypes.func.isRequired,
@@ -98,6 +111,7 @@ export default class Cards extends Component {
     startScrolling: PropTypes.func,
     stopScrolling: PropTypes.func,
     isScrolling: PropTypes.bool,
+    addCard: PropTypes.func,
   };
 
   constructor(props) {
@@ -106,6 +120,11 @@ export default class Cards extends Component {
       placeholderIndex: undefined,
       isScrolling: false,
     };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(str) {
+    this.props.addCard(this.props.x, str);
   }
 
   render() {
@@ -148,6 +167,7 @@ export default class Cards extends Component {
     if (isOver && canDrop && cards.length === 0) {
       cardList.push(<div key="placeholder" className="item placeholder" />);
     }
+    cardList.push(<AddButton key="Add Button" onClick={this.handleClick} />);
 
     return connectDropTarget(<div className="desk-items">{cardList}</div>);
   }

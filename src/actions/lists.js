@@ -1,35 +1,19 @@
-import faker from "faker";
-
-export const GET_LISTS_START = "GET_LISTS_START";
-export const GET_LISTS = "GET_LISTS";
-export const MOVE_CARD = "MOVE_CARD";
-export const MOVE_LIST = "MOVE_LIST";
-export const TOGGLE_DRAGGING = "TOGGLE_DRAGGING";
+import { getMockLists } from "../mockAPI";
+import {
+  GET_LISTS,
+  GET_LISTS_START,
+  MOVE_CARD,
+  MOVE_LIST,
+  TOGGLE_DRAGGING,
+  ADD_CARD,
+} from "./types";
 
 export function getLists(quantity) {
-  return (dispatch) => {
+  return async (dispatch) => {
     dispatch({ type: GET_LISTS_START, quantity });
-    setTimeout(() => {
-      const lists = [];
-      let count = 0;
-      for (let i = 0; i < quantity; i++) {
-        const cards = [];
-        const randomQuantity = Math.floor(Math.random() * (9 - 1 + 1)) + 1;
-        for (let ic = 0; ic < randomQuantity; ic++) {
-          cards.push({
-            id: count,
-            title: faker.name.jobTitle(),
-          });
-          count = count + 1;
-        }
-        lists.push({
-          id: i,
-          name: faker.commerce.productName(),
-          cards,
-        });
-      }
-      dispatch({ type: GET_LISTS, lists, isFetching: true });
-    }, 1000); // fake delay
+    const lists = await getMockLists(quantity);
+    dispatch({ type: GET_LISTS, lists, isFetching: true });
+
     dispatch({ type: GET_LISTS_START, isFetching: false });
   };
 }
@@ -43,6 +27,12 @@ export function moveList(lastX, nextX) {
 export function moveCard(lastX, lastY, nextX, nextY) {
   return (dispatch) => {
     dispatch({ type: MOVE_CARD, lastX, lastY, nextX, nextY });
+  };
+}
+
+export function addCard(x, title) {
+  return (dispatch) => {
+    dispatch({ type: ADD_CARD, x, title });
   };
 }
 

@@ -6,7 +6,11 @@ import {
   MOVE_CARD,
   MOVE_LIST,
   TOGGLE_DRAGGING,
-} from "../actions/lists";
+  ADD_EMAIL,
+  ADD_CARD,
+  DELETE_EMAIL,
+  DELETE_CARD,
+} from "../actions/types";
 
 /* eslint-disable new-cap */
 const InitialState = Record({
@@ -44,6 +48,26 @@ export default function lists(state = initialState, action) {
         ctx.set("lists", newLists);
       });
     }
+    case ADD_CARD: {
+      const newLists = [...state.lists];
+      const { x, title } = action;
+      newLists[x].cards.push({
+        id: newLists[x].cards.length,
+        title,
+        emails: [],
+      });
+      return state.withMutations((ctx) => {
+        ctx.set("lists", newLists);
+      });
+    }
+    case DELETE_CARD: {
+      const newLists = [...state.lists];
+      const { x, y } = action;
+      newLists[x].cards.splice(y, 1);
+      return state.withMutations((ctx) => {
+        ctx.set("lists", newLists);
+      });
+    }
     case MOVE_LIST: {
       const newLists = [...state.lists];
       const { lastX, nextX } = action;
@@ -57,6 +81,24 @@ export default function lists(state = initialState, action) {
     }
     case TOGGLE_DRAGGING: {
       return state.set("isDragging", action.isDragging);
+    }
+    case ADD_EMAIL: {
+      const { x, y, newEmail } = action;
+      const newLists = [...state.lists];
+      newLists[x].cards[y].emails.push(newEmail);
+
+      return state.withMutations((ctx) => {
+        ctx.set("lists", newLists);
+      });
+    }
+    case DELETE_EMAIL: {
+      const { x, y, id } = action;
+      const newLists = [...state.lists];
+      newLists[x].cards[y].emails.splice(id, 1);
+
+      return state.withMutations((ctx) => {
+        ctx.set("lists", newLists);
+      });
     }
     default:
       return state;
